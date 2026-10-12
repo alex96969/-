@@ -1,0 +1,39 @@
+{{define "layout"}}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Title}} · Расходник</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">К содержимому</a>
+  <div class="workspace">
+    <aside class="sidebar">
+      <a class="brand" href="/expenses"><span class="brand-icon" aria-hidden="true">Р</span><span>Расходник<small>Личный журнал расходов</small></span></a>
+      <p class="nav-caption">РАБОЧЕЕ ПРОСТРАНСТВО</p>
+      <nav aria-label="Основная навигация">
+        {{if .User.ID}}
+        <a href="/expenses"><span aria-hidden="true">▦</span>Обзор расходов</a>
+        <a href="/expenses/new"><span aria-hidden="true">＋</span>Новая запись</a>
+        <a href="/stats"><span aria-hidden="true">▥</span>Аналитика</a>
+        <a href="/expenses/export"><span aria-hidden="true">↓</span>Экспорт CSV</a>
+        {{else}}
+        <a href="/login">Вход в аккаунт</a>
+        <a href="/register">Регистрация</a>
+        {{end}}
+        <a href="/about"><span aria-hidden="true">○</span>О приложении</a>
+      </nav>
+      <div class="sidebar-note"><span>Одна запись —</span><strong>больше понимания.</strong><p>Ведите учёт в своём ритме.</p></div>
+    </aside>
+    <div class="content-area">
+      <header class="topbar"><span class="topbar-label">УЧЁТ ЛИЧНЫХ ТРАТ</span><div class="account">{{if .User.ID}}<span class="email">{{.User.Email}}</span><form method="post" action="/logout"><input type="hidden" name="csrf_token" value="{{.CSRF}}"><button class="button subtle" type="submit">Выйти</button></form>{{else}}<a href="/login">Войти</a><a class="button small" href="/register">Создать аккаунт</a>{{end}}</div></header>
+      <main id="main" class="main">{{template "content" .}}</main>
+      <footer class="footer"><span>Расходник · Учёт личных трат</span><span>Суммы в рублях · Точность до копейки</span></footer>
+    </div>
+  </div>
+</body>
+</html>
+{{end}}

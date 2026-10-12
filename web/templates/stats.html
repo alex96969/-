@@ -1,0 +1,10 @@
+{{define "content"}}
+<section class="page-heading"><div><p class="eyebrow">АНАЛИТИКА</p><h1>Как распределяются траты</h1><p class="muted">Категории объясняют структуру, месяцы показывают динамику.</p></div><a class="button secondary" href="/expenses">Вернуться к журналу</a></section>
+<noscript><p class="alert">Включите JavaScript для аналитики. Журнал расходов и экспорт доступны без него.</p></noscript>
+<div class="charts">
+  <section class="card"><p class="eyebrow">СТРУКТУРА РАСХОДОВ</p><h2>По категориям</h2><form id="category-filters" class="filters compact"><label>С даты<input type="date" name="from" min="0001-01-01" max="9999-12-31"></label><label>По дату<input type="date" name="to" min="0001-01-01" max="9999-12-31"></label><button class="button small" type="submit">Обновить</button></form><p id="category-message" class="muted" role="status">Загружаем данные…</p><div class="chart-container"><canvas id="category-chart" aria-label="Круговая диаграмма расходов по категориям" role="img"></canvas></div><details class="stat-details"><summary>Показать данные таблицей</summary><div id="category-table" class="table-scroll"></div></details></section>
+  <section class="card"><p class="eyebrow">ДИНАМИКА РАСХОДОВ</p><h2>По месяцам</h2><form id="month-filters" class="filters compact"><label>Год<input type="number" name="year" min="1" max="9999" value="{{.Year}}" required></label><button class="button small" type="submit">Обновить</button></form><p id="month-message" class="muted" role="status">Загружаем данные…</p><div class="chart-container"><canvas id="month-chart" aria-label="Столбчатая диаграмма расходов по месяцам" role="img"></canvas></div><details class="stat-details"><summary>Показать данные таблицей</summary><div id="month-table" class="table-scroll"></div></details></section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" defer></script>
+<script src="/static/stats.js" defer></script>
+{{end}}

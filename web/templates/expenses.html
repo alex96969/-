@@ -1,0 +1,30 @@
+{{define "content"}}
+<section class="page-heading">
+  <div><p class="eyebrow">ЛИЧНЫЙ КАБИНЕТ</p><h1>Обзор расходов</h1><p class="muted">Каждая покупка на своём месте.</p></div>
+  <a class="button" href="/expenses/new">+ Записать расход</a>
+</section>
+<section class="metrics" aria-label="Сводка выбранных расходов">
+  <article class="metric primary"><span>Потрачено за период</span><strong>{{money .Summary.Total}} <small>₽</small></strong><p>Записей в выборке: {{.Summary.Count}}</p></article>
+  <article class="metric"><span>Средний расход</span><strong>{{money .Summary.Average}} <small>₽</small></strong><p>На одну запись</p></article>
+  <article class="metric"><span>Самая крупная трата</span><strong>{{money .Summary.Largest}} <small>₽</small></strong><p>В выбранном периоде</p></article>
+</section>
+<section class="card filters-card">
+  <div class="section-heading"><h2>Выберите период</h2><a class="reset" href="/expenses">Сбросить фильтры</a></div>
+  <form class="filters" method="get" action="/expenses">
+    <label>Категория<select name="category"><option value="">Все категории</option>{{range .Categories}}<option value="{{.ID}}" {{if eq $.Filter.CategoryID .ID}}selected{{end}}>{{.Name}}</option>{{end}}</select></label>
+    <label>С даты<input type="date" name="from" value="{{.Filter.From}}" min="0001-01-01" max="9999-12-31"></label>
+    <label>По дату<input type="date" name="to" value="{{.Filter.To}}" min="0001-01-01" max="9999-12-31"></label>
+    <label>Порядок<select name="sort"><option value="newest" {{if eq .Filter.Sort "newest"}}selected{{end}}>Сначала новые</option><option value="oldest" {{if eq .Filter.Sort "oldest"}}selected{{end}}>Сначала старые</option><option value="largest" {{if eq .Filter.Sort "largest"}}selected{{end}}>Сначала крупные</option><option value="smallest" {{if eq .Filter.Sort "smallest"}}selected{{end}}>Сначала небольшие</option></select></label>
+    <button class="button" type="submit">Применить</button>
+  </form>
+  {{if .Error}}<p class="alert" role="alert">{{.Error}}</p>{{end}}
+</section>
+<section class="card history">
+  <div class="section-heading"><div><p class="eyebrow">ЖУРНАЛ</p><h2>Все операции <span class="count">{{len .Expenses}}</span></h2></div><a class="button secondary small" href="{{.ExportURL}}">Скачать выборку CSV ↓</a></div>
+  {{if .Expenses}}
+  <div class="table-scroll"><table><thead><tr><th scope="col">Описание</th><th scope="col">Дата</th><th scope="col">Категория</th><th scope="col" class="number">Сумма</th><th scope="col"><span class="sr-only">Действия</span></th></tr></thead><tbody>
+  {{range .Expenses}}<tr><td class="description"><strong>{{.Description}}</strong></td><td class="nowrap">{{date .Date}}</td><td><span class="tag">{{.Category}}</span></td><td class="number nowrap"><strong>{{money .Amount}} ₽</strong></td><td><div class="row-actions"><a href="/expenses/{{.ID}}/edit" aria-label="Редактировать: {{.Description}}">Изменить</a><a class="danger-link" href="/expenses/{{.ID}}/delete" aria-label="Удалить: {{.Description}}">Удалить</a></div></td></tr>{{end}}
+  </tbody></table></div>
+  {{else}}<div class="empty"><span class="empty-symbol" aria-hidden="true">＋</span><h3>Начните с первой записи</h3><p>Здесь появятся ваши расходы. Если записи уже есть, измените фильтры.</p><a class="button secondary" href="/expenses/new">Записать расход</a></div>{{end}}
+</section>
+{{end}}

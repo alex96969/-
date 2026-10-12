@@ -1,0 +1,18 @@
+{{define "content"}}
+<div class="auth-layout">
+  <section class="auth-intro"><p class="eyebrow">ВАШ ЛИЧНЫЙ РАСХОДНИК</p><h1>Расходы —<br>под контролем.</h1><p>Записывайте ежедневные покупки и наблюдайте, как складывается ваш месяц.</p><div class="intro-steps"><div><span>01</span><p>Добавляйте расходы<br><strong>Сумма, дата, категория</strong></p></div><div><span>02</span><p>Смотрите общую картину<br><strong>Графики и сводка</strong></p></div><div><span>03</span><p>Сохраняйте нужное<br><strong>Выгрузка в CSV</strong></p></div></div></section>
+  <section class="card auth-card">
+    <h2>{{.Title}}</h2><p class="muted">{{if eq .Mode "register"}}Создайте аккаунт, чтобы начать свой журнал.{{else}}Ваш журнал ждёт вас.{{end}}</p>
+    {{if .Notice}}<p class="notice" role="status">{{.Notice}}</p>{{end}}
+    <form class="stack" method="post" action="{{.Action}}">
+      <input type="hidden" name="csrf_token" value="{{.CSRF}}">
+      {{if .Error}}<p class="alert" role="alert">{{.Error}}</p>{{end}}
+      <label>Email<input type="email" name="email" value="{{.Email}}" required maxlength="254" autocomplete="email" placeholder="name@example.com">{{with index .Errors "email"}}<span class="field-error">{{.}}</span>{{end}}</label>
+      <label>Пароль<input type="password" name="password" required minlength="8" autocomplete="{{if eq .Mode "register"}}new-password{{else}}current-password{{end}}">{{with index .Errors "password"}}<span class="field-error">{{.}}</span>{{end}}</label>
+      {{if eq .Mode "register"}}<p class="hint">Минимум 8 символов, максимум 72 байта UTF-8. Кириллица занимает по 2 байта.</p>{{end}}
+      <button class="button" type="submit">{{if eq .Mode "register"}}Создать аккаунт{{else}}Войти{{end}}</button>
+    </form>
+    <p class="auth-switch">{{if eq .Mode "register"}}Есть аккаунт? <a href="/login">Войти</a>{{else}}Нет аккаунта? <a href="/register">Зарегистрироваться</a>{{end}}</p>
+  </section>
+</div>
+{{end}}
